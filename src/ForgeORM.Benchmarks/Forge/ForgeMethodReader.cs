@@ -26,7 +26,7 @@ public class ForgeExpressionMethodBenchmarks
     {
         return await _db.Set<Order>()
             .Where(x => x.CustomerId == CustomerId)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 
     [Benchmark]
@@ -34,7 +34,7 @@ public class ForgeExpressionMethodBenchmarks
     {
         return await _db.Set<Order>()
             .Where(x => x.CustomerId == CustomerId)
-            .FirstOrDefaultAsync(includeChildren:false);
+            .FirstOrDefaultAsync();
     }
 
     [Benchmark]
@@ -61,7 +61,7 @@ public class ForgeExpressionMethodBenchmarks
             .OrderByDescending(x => x.Id)
             .Skip(0)
             .Take(Take)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 
     [Benchmark]

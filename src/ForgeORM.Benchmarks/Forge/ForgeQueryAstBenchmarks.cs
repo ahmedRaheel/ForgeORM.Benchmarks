@@ -1,8 +1,10 @@
 using BenchmarkDotNet.Attributes;
+using ForgeORM.Benchmarks.Forge;
 using ForgeORM.Benchmarks.Infrastructure;
 using ForgeORM.Benchmarks.Models;
 using ForgeORM.Core;
 using ForgeORM.QueryAst;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ForgeORM.Benchmarks.Benchmarks;
 
@@ -13,8 +15,12 @@ namespace ForgeORM.Benchmarks.Benchmarks;
 [SimpleJob(warmupCount: 3, iterationCount: 10)]
 public class ForgeQueryAstBenchmarks
 {
+    private ServiceProvider _provider = default!;
     private ForgeDbContext _db = default!;
-    private BenchmarkSettings _settings = default!;
+    [Params(1, 2, 3)]
+    public int CustomerId { get; set; }
+    [Params(1, 2, 3)]
+    public int OrderId { get; set; }
 
     [Params(10, 50, 100)]
     public int Take { get; set; }
@@ -22,8 +28,8 @@ public class ForgeQueryAstBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        _settings = new BenchmarkSettings();
-        _db = ForgeBenchmarkDbFactory.Create(_settings.ConnectionString);
+        _provider = BenchmarkServices.Build();
+        _db = ForgeDbContextFactory.Create();
     }
 
     [Benchmark(Baseline = true)]
@@ -32,7 +38,7 @@ public class ForgeQueryAstBenchmarks
         var rendered = ForgeSql.Select<Order>()
             .Columns(x => x.Id, x => x.CustomerId, x => x.OrderNo, x => x.GrandTotal)
             .From("Orders")
-            .Where(x => x.CustomerId == _settings.QueryCustomerId)
+            .Where(x => x.CustomerId == CustomerId)
             .OrderByDescending(x => x.Id)
             .Skip(0)
             .Take(Take)
@@ -47,7 +53,7 @@ public class ForgeQueryAstBenchmarks
         return ForgeSql.Select<Order>()
             .Columns(x => x.Id, x => x.CustomerId, x => x.OrderNo, x => x.Status, x => x.GrandTotal,  x => x.CreatedAt, x => x.OrderDate)
             .From("Orders")
-            .Where(x => x.CustomerId == _settings.QueryCustomerId)
+            .Where(x => x.CustomerId == CustomerId)
             .OrderByDescending(x => x.Id)
             .Skip(0)
             .Take(Take)
@@ -60,7 +66,7 @@ public class ForgeQueryAstBenchmarks
         return ForgeSql.Select<Order>()
             .Columns(x => x.Id, x => x.CustomerId, x => x.OrderNo, x => x.Status, x => x.GrandTotal, x => x.CreatedAt, x => x.OrderDate)
             .From("Orders")
-            .Where(x => x.Id == _settings.QueryOrderId)
+            .Where(x => x.Id == CustomerId)
             .FirstOrDefaultAsync<Order, Order>(_db);
     }
 
@@ -69,7 +75,7 @@ public class ForgeQueryAstBenchmarks
     {
         return ForgeSql.Select<Order>()
             .From("Orders")
-            .Where(x => x.CustomerId == _settings.QueryCustomerId)
+            .Where(x => x.CustomerId == CustomerId)
             .CountAsync(_db);
     }
 
@@ -78,7 +84,7 @@ public class ForgeQueryAstBenchmarks
     {
         return ForgeSql.Select<Order>()
             .From("Orders")
-            .Where(x => x.CustomerId == _settings.QueryCustomerId)
+            .Where(x => x.CustomerId == CustomerId)
             .AnyAsync(_db);
     }
 
@@ -130,7 +136,7 @@ public class ForgeQueryAstBenchmarks
     {
         var rendered = ForgeSql.Select<Order>()
             .From("Orders")
-            .Where(x => x.Id == _settings.QueryOrderId)
+            .Where(x => x.Id == OrderId)
             .RenderUpdate(_db.Provider, new { TotalAmount = 999m });
 
         return rendered.Sql;
@@ -141,7 +147,7 @@ public class ForgeQueryAstBenchmarks
     {
         var rendered = ForgeSql.Select<Order>()
             .From("Orders")
-            .Where(x => x.Id == _settings.QueryOrderId)
+            .Where(x => x.Id == OrderId)
             .RenderDelete(_db.Provider);
 
         return rendered.Sql;

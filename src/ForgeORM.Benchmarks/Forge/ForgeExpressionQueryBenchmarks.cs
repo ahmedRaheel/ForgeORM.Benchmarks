@@ -31,7 +31,7 @@ public class ForgeExpressionQueryBenchmarks
     {
         return _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 
     [Benchmark]
@@ -39,7 +39,7 @@ public class ForgeExpressionQueryBenchmarks
     {
         return _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
-            .FirstOrDefaultAsync(includeChildren:false);
+            .FirstOrDefaultAsync();
     }
 
     [Benchmark]
@@ -98,7 +98,7 @@ public class ForgeExpressionQueryBenchmarks
             .OrderByDescending(x => x.Id)
             .Skip(0)
             .Take(Take)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 
     //[Benchmark]
@@ -117,7 +117,7 @@ public class ForgeExpressionQueryBenchmarks
             .WhereSql("CustomerId = @CustomerId", new { CustomerId = _settings.QueryCustomerId })
             .OrderBySql("Id DESC")
             .Take(Take)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 
     [Benchmark]
@@ -128,6 +128,6 @@ public class ForgeExpressionQueryBenchmarks
             .WhereSqlIf(false, "Status = @Status", new { Status = "Paid" })
             .OrderByDescending(x => x.Id)
             .Take(Take)
-            .ToListAsync(includeChildren: false);
+            .ToListAsync();
     }
 }

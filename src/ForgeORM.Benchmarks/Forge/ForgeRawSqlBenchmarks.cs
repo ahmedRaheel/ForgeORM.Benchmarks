@@ -103,6 +103,6 @@ public class ForgeRawSqlBenchmarks
             .WhereSql("CustomerId = @CustomerId", new { CustomerId = _settings.QueryCustomerId })
             .OrderBySql("Id DESC")
             .Take(Take)
-            .ToListAsync(includeChildren:false);
+            .ToListAsync();
     }
 }

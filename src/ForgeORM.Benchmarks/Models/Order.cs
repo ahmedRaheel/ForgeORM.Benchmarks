@@ -15,5 +15,5 @@ public sealed class Order
     public decimal GrandTotal { get; set; }
     public DateTime CreatedAt { get; set; }
     public Customer? Customer { get; set; }
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 }
