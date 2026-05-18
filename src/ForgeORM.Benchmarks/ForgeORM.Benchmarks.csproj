@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>ForgeORM.Benchmarks</AssemblyName>
+    <RootNamespace>ForgeORM.Benchmarks</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <!--<PackageReference Include="ForgeORM.Abstractions" Version="1.3.5" />
+    <PackageReference Include="ForgeORM.AspNetCore" Version="1.3.5" />
+    <PackageReference Include="ForgeORM.Providers.SqlServer" Version="1.3.5" />
+-->    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
+
+    <!-- Replace these names/versions with your actual ForgeORM NuGet package IDs. -->
+    <!-- <PackageReference Include="ForgeORM.Core" Version="1.0.0" /> -->
+    <!-- <PackageReference Include="ForgeORM.SqlServer" Version="1.0.0" /> -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ForgeORM.Abstractions">
+      <HintPath>NewFolder\ForgeORM.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="ForgeORM.Analytics">
+      <HintPath>NewFolder\ForgeORM.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="ForgeORM.Core">
+      <HintPath>NewFolder\ForgeORM.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ForgeORM.Providers.SqlServer">
+      <HintPath>NewFolder\ForgeORM.Providers.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ForgeORM.QueryAst">
+      <HintPath>NewFolder\ForgeORM.QueryAst.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
