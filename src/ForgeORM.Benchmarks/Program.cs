@@ -5,6 +5,6 @@ using ForgeORM.Benchmarks.Benchmarks;
 //BenchmarkRunner.Run<SearchAndPagingBenchmarks>();
 //BenchmarkRunner.Run<InsertBenchmarks>();
 //BenchmarkRunner.Run<ForgeExpressionVsSqlBenchmarks>();
-//BenchmarkRunner.Run<ForgeGraphBenchmarks>();
+BenchmarkRunner.Run<ForgeGraphBenchmarks>();
 
-BenchmarkRunner.Run<ForgeQueryAstBenchmarks>();
+//BenchmarkRunner.Run<ForgeQueryAstBenchmarks>();

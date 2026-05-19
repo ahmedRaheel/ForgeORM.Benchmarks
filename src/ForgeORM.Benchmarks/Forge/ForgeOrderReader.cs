@@ -20,11 +20,8 @@ public sealed class ForgeOrderReader
     public async Task<OrderDto?> GetByIdAsync(int id, CancellationToken ct = default)
     {
         var db = ForgeDbContextFactory.Create();
-       
-        return await db.QuerySingleOrDefaultAsync<OrderDto>(
-               BenchmarkSql.QueryById,
-                new { Id = id },
-                cancellationToken: ct);
+
+        return await db.QueryFirstOrDefaultAsync<OrderDto>(BenchmarkSql.QueryById, new { Id = id }, cancellationToken: ct);
     }
 
     public async Task<IReadOnlyList<OrderDto>> SearchPagedAsync(int customerId, int skip, int take, CancellationToken ct = default)

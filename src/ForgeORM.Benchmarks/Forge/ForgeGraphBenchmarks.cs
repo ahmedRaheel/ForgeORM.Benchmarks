@@ -49,7 +49,7 @@ public class ForgeGraphBenchmarks
         var id = await _db.InsertGraphAsync<Order, OrderItem, int>(
             order,
             x => x.Items,
-            x => x.Id,
+            x => x.CustomerId,
             x => x.OrderId);
 
         var existing = await _db.GetByIdAsync<Order>(id) ?? order;
@@ -71,7 +71,7 @@ public class ForgeGraphBenchmarks
         var id = await _db.InsertGraphAsync<Order, OrderItem, int>(
             order,
             x => x.Items,
-            x => x.Id,
+           x => x.CustomerId,
             x => x.OrderId);
 
         return await _db.DeleteGraphAsync<Order>(id, options =>
