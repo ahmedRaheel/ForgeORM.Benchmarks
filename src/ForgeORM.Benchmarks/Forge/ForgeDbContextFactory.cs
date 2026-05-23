@@ -20,19 +20,18 @@ public static class ForgeDbContextFactory
     /// </summary>
     public static ForgeDbContext Create()
     {
-        IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("appsettings.json", optional: false)
-            //.AddEnvironmentVariables()
-            .Build();
-
         var settings = BenchmarkSettings.Load();
+
+        ForgeSourceGeneratedRegistry.CompilationMode =
+            ForgeOrmCompilationMode.Auto;
 
         IForgeDatabaseProvider provider =
             new SqlServerForgeProvider();
 
         IForgeEntityMetadataResolver metadata =
-            new ReflectionForgeEntityMetadataResolver();
+            ForgeSourceGeneratedRegistry.HasGeneratedMetadata
+                ? new SourceGeneratedForgeEntityMetadataResolver()
+                : new ReflectionForgeEntityMetadataResolver();
 
         IForgeQueryAnalyzer analyzer =
             new BasicForgeQueryAnalyzer();

@@ -30,13 +30,13 @@ public class QueryByIdBenchmarks
     }
 
     [Benchmark(Baseline = true)]
-    public Task<OrderDto?> Dapper_Query_By_Id() => _dapper.GetByIdAsync(_settings.QueryOrderId);
+    public async Task<OrderDto?> Dapper_Query_By_Id() => await _dapper.GetByIdAsync(_settings.QueryOrderId);
 
     [Benchmark]
-    public Task<OrderDto?> EF_Core_Query_By_Id() => _ef.GetByIdAsync(_settings.QueryOrderId);
+    public async Task<OrderDto?> EF_Core_Query_By_Id() => await _ef.GetByIdAsync(_settings.QueryOrderId);
 
     [Benchmark]
-    public Task<OrderDto?> ForgeORM_Query_By_Id() => _forge.GetByIdAsync(_settings.QueryOrderId);
+    public async Task<Order> ForgeORM_Query_By_Id() => await _forge.GetByIdAsync(_settings.QueryOrderId);
 
     [GlobalCleanup]
     public void Cleanup() => _provider.Dispose();

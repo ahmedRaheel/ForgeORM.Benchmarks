@@ -61,10 +61,15 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);
         // Wire this to your real ForgeORM insert API:
         var db = ForgeDbContextFactory.Create();
       
-        return await db.InsertAsync(NewOrder());
+        var result= await db.ExecuteScalarAsync<int>("""
+INSERT INTO dbo.Orders(OrderNo, CustomerId, OrderDate, Status, SubTotal, Tax, GrandTotal, CreatedAt)
+VALUES (@OrderNo, @CustomerId, SYSUTCDATETIME(), @Status, @SubTotal, @Tax, @GrandTotal, SYSUTCDATETIME());
+SELECT CAST(SCOPE_IDENTITY() AS INT);
+""", NewOrder());
+        return result;
        
     }
-
+    
     [GlobalCleanup]
     public void Cleanup() => _provider.Dispose();
 
