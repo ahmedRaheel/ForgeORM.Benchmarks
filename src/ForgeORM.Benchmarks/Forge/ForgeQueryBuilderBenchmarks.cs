@@ -37,9 +37,9 @@ public class ForgeQueryBuilderBenchmarks
     }
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> QueryBuilder_Execute_ToListAsync()
+    public async Task<IReadOnlyList<Order>> QueryBuilder_Execute_ToListAsync()
     {
-        return _db.Query<Order>()
+        return await _db.Query<Order>()
             .Select(x => x.Id, x => x.CustomerId, x => x.OrderNo, x => x.Status, x => x.GrandTotal,  x => x.CreatedAt, x => x.OrderDate)
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .OrderByDescending(x => x.Id)

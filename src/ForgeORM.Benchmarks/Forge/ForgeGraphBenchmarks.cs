@@ -31,11 +31,11 @@ public class ForgeGraphBenchmarks
     }     
 
     [Benchmark(Baseline = true)]
-    public Task<int> InsertGraphAsync_Order_With_Items()
+    public async Task<int> InsertGraphAsync_Order_With_Items()
     {
         var order = NewOrderGraph();
 
-        return _db.InsertGraphAsync<Order, OrderItem, int>(
+        return await _db.InsertGraphAsync<Order, OrderItem, int>(
             order,
             x => x.Items,
             x => x.Id,

@@ -27,9 +27,9 @@ public class ForgeRawSqlBenchmarks
     }
 
     [Benchmark(Baseline = true)]
-    public Task<IReadOnlyList<Order>> QueryAsync_ToList()
+    public async Task<IReadOnlyList<Order>> QueryAsync_ToList()
     {
-        return _db.QueryAsync<Order>(
+        return await _db.QueryAsync<Order>(
             """
             SELECT Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate
             FROM Orders
@@ -41,9 +41,9 @@ public class ForgeRawSqlBenchmarks
     }
 
     [Benchmark]
-    public Task<Order?> QueryFirstOrDefaultAsync()
+    public async Task<Order?> QueryFirstOrDefaultAsync()
     {
-        return _db.QueryFirstOrDefaultAsync<Order>(
+        return await _db.QueryFirstOrDefaultAsync<Order>(
             """
             SELECT TOP 1 Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate
             FROM Orders
@@ -54,9 +54,9 @@ public class ForgeRawSqlBenchmarks
     }
 
     [Benchmark]
-    public Task<Order?> QuerySingleOrDefaultAsync()
+    public async Task<Order?> QuerySingleOrDefaultAsync()
     {
-        return _db.QuerySingleOrDefaultAsync<Order>(
+        return await _db.QuerySingleOrDefaultAsync<Order>(
             """
             SELECT TOP 1 Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate
             FROM Orders
@@ -74,17 +74,17 @@ public class ForgeRawSqlBenchmarks
     }
 
     [Benchmark]
-    public Task<int> ExecuteAsync_NoOpUpdate()
+    public async Task<int> ExecuteAsync_NoOpUpdate()
     {
-        return _db.ExecuteAsync(
+        return await _db.ExecuteAsync(
             "UPDATE Orders SET TotalAmount = TotalAmount WHERE Id = @Id",
             new { Id = _settings.QueryOrderId });
     }
 
     [Benchmark]
-    public Task<ForgePagedResult<Order>> PageAsync_RawSql()
+    public async Task<ForgePagedResult<Order>> PageAsync_RawSql()
     {
-        return _db.PageAsync<Order>(new ForgePageRequest
+        return await _db.PageAsync<Order>(new ForgePageRequest
         {
             Sql = "SELECT Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate FROM Orders WHERE CustomerId = @CustomerId",
             Parameters = new { CustomerId = _settings.QueryCustomerId },
@@ -95,9 +95,9 @@ public class ForgeRawSqlBenchmarks
     }
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> Sql_Composable_Query_ToListAsync()
+    public async Task<IReadOnlyList<Order>> Sql_Composable_Query_ToListAsync()
     {
-        return _db.Sql<Order>(
+        return  await _db.Sql<Order>(
                 "SELECT Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate FROM Orders",
                 null)
             .WhereSql("CustomerId = @CustomerId", new { CustomerId = _settings.QueryCustomerId })

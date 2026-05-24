@@ -23,7 +23,7 @@ public static class ForgeDbContextFactory
         var settings = BenchmarkSettings.Load();
 
         ForgeSourceGeneratedRegistry.CompilationMode =
-            ForgeOrmCompilationMode.Auto;
+            ForgeOrmCompilationMode.RuntimeEmit;
 
         IForgeDatabaseProvider provider =
             new SqlServerForgeProvider();

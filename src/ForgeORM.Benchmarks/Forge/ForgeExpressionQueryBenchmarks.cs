@@ -27,73 +27,73 @@ public class ForgeExpressionQueryBenchmarks
     }
 
     [Benchmark(Baseline = true)]
-    public Task<IReadOnlyList<Order>> Where_ToListAsync()
+    public async Task<IReadOnlyList<Order>> Where_ToListAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .ToListAsync();
     }
 
     [Benchmark]
-    public Task<Order?> Where_FirstOrDefaultAsync()
+    public async Task<Order?> Where_FirstOrDefaultAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .FirstOrDefaultAsync();
     }
 
     [Benchmark]
-    public Task<bool> Where_AnyAsync()
+    public async Task<bool> Where_AnyAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .AnyAsync();
     }
 
     [Benchmark]
-    public Task<int> Where_CountAsync()
+    public async Task<int> Where_CountAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .CountAsync();
     }
 
     [Benchmark]
-    public Task<decimal> Where_SumAsync()
+    public async Task<decimal> Where_SumAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .SumAsync(x => x.GrandTotal);
     }
 
     [Benchmark]
-    public Task<decimal> Where_AverageAsync()
+    public async Task<decimal> Where_AverageAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .AverageAsync(x => x.GrandTotal);
     }
 
     [Benchmark]
-    public Task<decimal> Where_MinAsync()
+    public async Task<decimal> Where_MinAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .MinAsync(x => x.GrandTotal);
     }
 
     [Benchmark]
-    public Task<decimal> Where_MaxAsync()
+    public async Task<decimal> Where_MaxAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .MaxAsync(x => x.GrandTotal);
     }
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> Where_OrderByDescending_Skip_Take_ToListAsync()
+    public async Task<IReadOnlyList<Order>> Where_OrderByDescending_Skip_Take_ToListAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .Where(x => x.CustomerId == _settings.QueryCustomerId)
             .OrderByDescending(x => x.Id)
             .Skip(0)
@@ -111,9 +111,9 @@ public class ForgeExpressionQueryBenchmarks
     //}
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> WhereSql_OrderBySql_ToListAsync()
+    public async Task<IReadOnlyList<Order>> WhereSql_OrderBySql_ToListAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .WhereSql("CustomerId = @CustomerId", new { CustomerId = _settings.QueryCustomerId })
             .OrderBySql("Id DESC")
             .Take(Take)
@@ -121,9 +121,9 @@ public class ForgeExpressionQueryBenchmarks
     }
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> WhereIf_WhereSqlIf_ToListAsync()
+    public async Task<IReadOnlyList<Order>> WhereIf_WhereSqlIf_ToListAsync()
     {
-        return _db.Set<Order>()
+        return await _db.Set<Order>()
             .WhereIf(true, x => x.CustomerId == _settings.QueryCustomerId)
             .WhereSqlIf(false, "Status = @Status", new { Status = "Paid" })
             .OrderByDescending(x => x.Id)

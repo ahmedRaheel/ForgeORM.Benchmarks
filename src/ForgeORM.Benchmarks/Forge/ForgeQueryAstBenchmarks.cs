@@ -61,9 +61,9 @@ public class ForgeQueryAstBenchmarks
     //}
 
     [Benchmark]
-    public Task<Order?> ForgeSql_Execute_FirstOrDefaultAsync()
+    public async Task<Order?> ForgeSql_Execute_FirstOrDefaultAsync()
     {
-        return ForgeSql.Select<Order>()
+        return await ForgeSql.Select<Order>()
             .Columns(x => x.Id, x => x.CustomerId, x => x.OrderNo, x => x.Status, x => x.GrandTotal, x => x.CreatedAt, x => x.OrderDate)
             .From("Orders")
             .Where(x => x.Id == CustomerId)
@@ -71,9 +71,9 @@ public class ForgeQueryAstBenchmarks
     }
 
     [Benchmark]
-    public Task<int> ForgeSql_Execute_CountAsync()
+    public async Task<int> ForgeSql_Execute_CountAsync()
     {
-        return ForgeSql.Select<Order>()
+        return await ForgeSql.Select<Order>()
             .From("Orders")
             .Where(x => x.CustomerId == CustomerId)
             .CountAsync(_db);

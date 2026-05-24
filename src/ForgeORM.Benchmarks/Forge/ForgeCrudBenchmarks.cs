@@ -28,27 +28,27 @@ public class ForgeCrudBenchmarks
     }
 
     [Benchmark(Baseline = true)]
-    public Task<Order?> GetByIdAsync()
+    public async Task<Order?> GetByIdAsync()
     {
-        return _db.GetByIdAsync<Order>(_settings.QueryOrderId);
+        return await _db.GetByIdAsync<Order>(_settings.QueryOrderId);
     }
 
     [Benchmark]
-    public Task<Product?> GetByCodeAsync()
+    public async Task<Product?> GetByCodeAsync()
     {
-        return _db.GetByCodeAsync<Product>("SKU-001");
+        return await _db.GetByCodeAsync<Product>("SKU-001");
     }
 
     [Benchmark]
-    public Task<IReadOnlyList<Order>> GetByIdsAsync()
+    public async Task<IReadOnlyList<Order>> GetByIdsAsync()
     {
-        return _db.GetByIdsAsync<Order>([1, 2, 3, 4, 5]);
+        return await _db.GetByIdsAsync<Order>([1, 2, 3, 4, 5]);
     }
 
     [Benchmark]
-    public Task<int> InsertAsync_Order()
+    public async Task<int> InsertAsync_Order()
     {
-        return _db.InsertAsync(BenchmarkDataFactory.NewOrder(_settings.QueryCustomerId));
+        return  await _db.InsertAsync(BenchmarkDataFactory.NewOrder(_settings.QueryCustomerId));
     }
 
     [Benchmark]

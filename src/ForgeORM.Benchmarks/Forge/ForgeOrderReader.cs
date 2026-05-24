@@ -1,7 +1,9 @@
 using Azure;
+using ForgeORM.Abstractions;
 using ForgeORM.Benchmarks.Models;
 using ForgeORM.Benchmarks.Sql;
 using ForgeORM.Core;
+using ForgeORM.Core.Performance;
 
 
 namespace ForgeORM.Benchmarks.Forge;
@@ -18,18 +20,19 @@ public sealed class ForgeOrderReader
         _connectionString = connectionString;
     }
 
-    public async Task<Order?> GetByIdAsync(int id, CancellationToken ct = default)
+    public  async Task<Order?> GetByIdAsync(int id, CancellationToken ct = default)
     {
         var db = ForgeDbContextFactory.Create();
 
-        return await db.GetByIdAsync<Order>(id);
+        return await  db.QueryFirstOrDefaultAsync<Order>(BenchmarkSql.QueryById, new { Id = id });
+        
     }
 
-    public async Task<IReadOnlyList<OrderDto>> SearchPagedAsync(int customerId, int skip, int take, CancellationToken ct = default)
+    public  async Task<IReadOnlyList<OrderDto>> SearchPagedAsync(int customerId, int skip, int take, CancellationToken ct = default)
     {
         var db = ForgeDbContextFactory.Create();
 
        
-        return await db.QueryAsync<OrderDto>(BenchmarkSql.SearchPaged, new { CustomerId = customerId, Skip = skip, Take = take }, cancellationToken: ct);
+        return await  db.QueryAsync<OrderDto>(BenchmarkSql.SearchPaged, new { CustomerId = customerId, Skip = skip, Take = take }, cancellationToken: ct);
     }
 }
