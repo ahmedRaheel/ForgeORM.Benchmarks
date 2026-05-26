@@ -25,6 +25,7 @@ public static class ForgeDbContextFactory
         ForgeSourceGeneratedRegistry.CompilationMode =
             ForgeOrmCompilationMode.RuntimeEmit;
 
+       
         IForgeDatabaseProvider provider =
             new SqlServerForgeProvider();
 
