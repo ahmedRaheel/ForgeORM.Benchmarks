@@ -85,6 +85,26 @@ CREATE INDEX IX_Orders_Total ON dbo.Orders(GrandTotal);
 CREATE INDEX IX_OrderItems_OrderId ON dbo.OrderItems(OrderId);
 CREATE INDEX IX_OrderItems_ProductId ON dbo.OrderItems(ProductId);
 CREATE INDEX IX_Payments_OrderId ON dbo.Payments(OrderId);
+
+IF OBJECT_ID('dbo.GetOrderByIdForBenchmark', 'P') IS NOT NULL DROP PROCEDURE dbo.GetOrderByIdForBenchmark;
+EXEC('CREATE PROCEDURE dbo.GetOrderByIdForBenchmark
+    @Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT TOP (1)
+        o.Id,
+        o.OrderNo,
+        o.CustomerId,
+        c.FullName AS CustomerName,
+        o.GrandTotal,
+        o.Status,
+        o.OrderDate
+    FROM dbo.Orders o
+    INNER JOIN dbo.Customers c ON c.Id = o.CustomerId
+    WHERE o.Id = @Id;
+END');
+
 """;
 
     public const string QueryById = """
@@ -204,4 +224,77 @@ DELETE FROM dbo.Payments WHERE OrderId = @Id;
 DELETE FROM dbo.OrderItems WHERE OrderId = @Id;
 DELETE FROM dbo.Orders WHERE Id = @Id;
 """;
+
+    public const string QueryFirst = """
+SELECT TOP (1)
+    o.Id,
+    o.OrderNo,
+    o.CustomerId,
+    c.FullName AS CustomerName,
+    o.GrandTotal,
+    o.Status,
+    o.OrderDate
+FROM dbo.Orders o
+INNER JOIN dbo.Customers c ON c.Id = o.CustomerId
+WHERE o.CustomerId = @CustomerId
+ORDER BY o.Id DESC;
+""";
+
+    public const string QueryList = """
+SELECT TOP (@Take)
+    o.Id,
+    o.OrderNo,
+    o.CustomerId,
+    c.FullName AS CustomerName,
+    o.GrandTotal,
+    o.Status,
+    o.OrderDate
+FROM dbo.Orders o
+INNER JOIN dbo.Customers c ON c.Id = o.CustomerId
+WHERE o.CustomerId = @CustomerId
+ORDER BY o.Id DESC;
+""";
+
+    public const string RecordDto = QueryById;
+
+    public const string EnumMapping = """
+SELECT TOP (1)
+    o.Id,
+    o.OrderNo,
+    o.Status
+FROM dbo.Orders o
+WHERE o.Status = @Status
+ORDER BY o.Id DESC;
+""";
+
+    public const string SplitQueryParent = """
+SELECT TOP (1)
+    o.Id,
+    o.OrderNo,
+    o.CustomerId,
+    o.OrderDate,
+    o.Status,
+    o.SubTotal,
+    o.Tax,
+    o.GrandTotal,
+    o.CreatedAt
+FROM dbo.Orders o
+WHERE o.Id = @Id;
+""";
+
+    public const string SplitQueryChildren = """
+SELECT
+    oi.Id,
+    oi.OrderId,
+    oi.ProductId,
+    oi.Quantity,
+    oi.UnitPrice,
+    oi.LineTotal
+FROM dbo.OrderItems oi
+WHERE oi.OrderId = @Id
+ORDER BY oi.Id;
+""";
+
+    public const string StoredProcedureName = "dbo.GetOrderByIdForBenchmark";
+
 }
