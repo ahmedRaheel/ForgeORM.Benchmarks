@@ -1,5 +1,8 @@
+using ForgeORM.Abstractions;
+
 namespace ForgeORM.Benchmarks.Models;
 
+[ForgeTable("Products")]
 public sealed class Product
 {
     public int Id { get; set; }

@@ -1,4 +1,5 @@
 using BenchmarkDotNet.Attributes;
+using ForgeORM.Benchmarks.Forge;
 using ForgeORM.Benchmarks.Infrastructure;
 using ForgeORM.Benchmarks.Models;
 using ForgeORM.Core;
@@ -22,7 +23,7 @@ public class ForgeCrudBenchmarks
     public async Task Setup()
     {
         _settings = new BenchmarkSettings();
-        _db = ForgeBenchmarkDbFactory.Create(_settings.ConnectionString);
+        _db =  ForgeDbContextFactory.Create();
         _rowForUpdate = await InsertAndReturnIdAsync();
         _rowForDelete = await InsertAndReturnIdAsync();
     }
@@ -31,13 +32,7 @@ public class ForgeCrudBenchmarks
     public async Task<Order?> GetByIdAsync()
     {
         return await _db.GetByIdAsync<Order>(_settings.QueryOrderId);
-    }
-
-    [Benchmark]
-    public async Task<Product?> GetByCodeAsync()
-    {
-        return await _db.GetByCodeAsync<Product>("SKU-001");
-    }
+    }    
 
     [Benchmark]
     public async Task<IReadOnlyList<Order>> GetByIdsAsync()
@@ -75,7 +70,14 @@ public class ForgeCrudBenchmarks
         await _db.InsertAsync(order);
         var inserted = await _db.QueryFirstOrDefaultAsync<Order>(
             """
-            SELECT TOP 1 Id, CustomerId, OrderNo, Status, GrandTotal, TotalAmount, CreatedAt, OrderDate
+            SELECT TOP 1 [Id], [OrderNo]
+            ,[CustomerId]
+            ,[OrderDate]
+            ,[Status]
+            ,[SubTotal]
+            ,[Tax]
+            ,[GrandTotal]
+            ,[CreatedAt]
             FROM Orders
             WHERE OrderNo = @OrderNo
             ORDER BY Id DESC
