@@ -220,9 +220,9 @@ public class CoreScenarioBenchmarks
     public async Task<int> ForgeORM_Insert_Bulk()
     {
         var rows = NewOrders(Take);
-        var inserted = 0;
-        for (var i = 0; i < rows.Length; i++)
-            inserted += await _forge.ExecuteScalarAsync<int>(BenchmarkSql.InsertOrderSql, rows[i]) > 0 ? 1 : 0;
+        var inserted = rows.Count();
+
+        await _forge.BulkInsertAsync<Order>(rows);
         return inserted;
     }
 
